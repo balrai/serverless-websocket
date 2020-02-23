@@ -27,6 +27,10 @@ exports.handler = async event => {
     // update emoji data and write back
     const userInput = body.message;
 
+    if (emojiData.length < 1) {
+      emojiData.push({ like: 0, dislike: 0, love: 0 });
+    }
+
     switch (userInput) {
       case "like":
         emojiData[0].like += 1;
@@ -42,15 +46,16 @@ exports.handler = async event => {
       default:
         break;
     }
+
     await Dynamo.writeEmoji(emojiData[0], emojiTableName);
 
     // send updated emoji data to all connections
     let responseArray = connectionIDs.map(async record => {
-      const { domainName, stage, connectionID } = record;
+      const { domainName, stage, ID } = record;
       await WebSocket.send({
         domainName,
         stage,
-        connectionID,
+        ID,
         data: emojiData
       });
     });

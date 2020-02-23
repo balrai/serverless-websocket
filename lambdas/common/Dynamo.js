@@ -17,6 +17,14 @@ const Dynamo = {
     const data = await documentClient.scan(params).promise();
     return data.Items;
   },
+  async writeEmojiData(data, TableName) {
+    const params = {
+      TableName,
+      Item: data
+    };
+    await documentClient.put(params).promise();
+    return;
+  },
   async get(ID, TableName) {
     const params = {
       TableName,
