@@ -1,5 +1,6 @@
 const Responses = require("../common/API_Responses");
 const Dynamo = require("../common/Dynamo");
+const WebSocket = require("../common/websocketMessage");
 
 const tableName = process.env.tableName;
 
@@ -12,7 +13,7 @@ exports.handler = async event => {
 
   try {
     const record = await Dynamo.get(connectionID, tableName);
-    const messages = record.messages;
+    const { messages, domainName, stage } = record;
 
     messages.push(body.message);
 
@@ -22,6 +23,12 @@ exports.handler = async event => {
     };
 
     await Dynamo.write(data, tableName);
+    await WebSocket.send({
+      domainName,
+      stage,
+      connectionID,
+      message: "This is a reply to your message"
+    });
     return Responses._200({ message: "got a message" });
   } catch (err) {
     return Responses._400({ message: "message could not be recieved" });
