@@ -47,16 +47,17 @@ exports.handler = async event => {
         break;
     }
 
-    await Dynamo.writeEmoji(emojiData[0], emojiTableName);
+    await Dynamo.writeEmojiData(emojiData[0], emojiTableName);
 
     // send updated emoji data to all connections
     let responseArray = connectionIDs.map(async record => {
+      console.log("record: ", record);
       const { domainName, stage, ID } = record;
       await WebSocket.send({
         domainName,
         stage,
         ID,
-        data: emojiData
+        data: emojiData[0]
       });
     });
 
