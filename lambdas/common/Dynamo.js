@@ -3,6 +3,20 @@ const AWS = require("aws-sdk");
 const documentClient = new AWS.DynamoDB.DocumentClient();
 
 const Dynamo = {
+  async getAllID(TableName) {
+    const params = {
+      TableName
+    };
+    const data = await documentClient.scan(params).promise();
+    return data.Items;
+  },
+  async getEmojiData(TableName) {
+    const params = {
+      TableName
+    };
+    const data = await documentClient.scan(params).promise();
+    return data.Items;
+  },
   async get(ID, TableName) {
     const params = {
       TableName,

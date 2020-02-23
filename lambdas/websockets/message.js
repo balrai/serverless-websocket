@@ -2,33 +2,64 @@ const Responses = require("../common/API_Responses");
 const Dynamo = require("../common/Dynamo");
 const WebSocket = require("../common/websocketMessage");
 
-const tableName = process.env.tableName;
+const usersTableName = process.env.tableName1;
+const emojiTableName = process.env.tableName2;
 
 exports.handler = async event => {
   console.log("event", event);
 
-  const { connectionId: connectionID } = event.requestContext;
+  //   const { connectionId: connectionID } = event.requestContext;
 
   const body = JSON.parse(event.body);
 
   try {
-    const record = await Dynamo.get(connectionID, tableName);
-    const { messages, domainName, stage } = record;
+    // const record = await Dynamo.get(connectionID, usersTableName);
+    // const { messages, domainName, stage } = record;
 
-    messages.push(body.message);
+    // TODO: get emoji data
+    const emojiData = await Dynamo.getEmojiData(emojiTableName);
+    console.log("emojiData: ", emojiData);
 
-    const data = {
-      ...record,
-      messages
-    };
+    // get all connectionID
+    const connectionIDs = (await Dynamo.getAllID(usersTableName)).Items;
+    console.log("connectionIDs: ", connectionIDs);
 
-    await Dynamo.write(data, tableName);
-    await WebSocket.send({
-      domainName,
-      stage,
-      connectionID,
-      message: "This is a reply to your message"
-    });
+    // update emoji data and write back
+    const userInput = body.message;
+
+    switch (userInput) {
+      case "like":
+        emojiData[0].like += 1;
+        break;
+
+      case "dislike":
+        emojiData[0].dislike += 1;
+        break;
+
+      case "love":
+        emojiData[0].love += 1;
+
+      default:
+        break;
+    }
+    await Dynamo.writeEmoji(emojiData[0], emojiTableName);
+
+    // send updated emoji data to all connections
+    let responseArray = connectionIDs
+      .map(record => {
+        const { domainName, stage, connectionID } = record;
+        await WebSocket.send({
+            domainName,
+            stage,
+            connectionID,
+            data: emojiData
+          });
+
+      });
+
+      await Promise.all(responseArray);
+
+
     return Responses._200({ message: "got a message" });
   } catch (err) {
     return Responses._400({ message: "message could not be recieved" });

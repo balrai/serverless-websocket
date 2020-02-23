@@ -1,7 +1,8 @@
 const Responses = require("../common/API_Responses");
 const Dynamo = require("../common/Dynamo");
 
-const tableName = process.env.tableName;
+const usersTableName = process.env.tableName1;
+const emojiTableName = process.env.tableName2;
 
 exports.handler = async event => {
   console.log("event", event);
@@ -15,12 +16,15 @@ exports.handler = async event => {
   const data = {
     ID: connectionID,
     date: Date.now(),
-    messages: [],
     domainName,
     stage
   };
 
-  await Dynamo.write(data, tableName);
+  await Dynamo.write(data, usersTableName);
+  // TODO:  for live viewers, get all the connection ID and send data
 
-  return Responses._200({ message: "connected" });
+  // get emoji data for sending to newly connected users
+  const emojiData = await Dynamo.getEmojiData(emojiTableName);
+
+  return Responses._200({ message: "connected", data: emojiData });
 };
