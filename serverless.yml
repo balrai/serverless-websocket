@@ -6,8 +6,8 @@ provider:
   profile: default
   region: ap-southeast-1
   environment:
-    tableName1: ${self:custom.usersTableName}
-    tableName2: ${self:custom.emojiTableName}
+    tableName: ${self:custom.usersTableName}
+    tableName: ${self:custom.emojiTableName}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -45,7 +45,7 @@ resources:
     WebsocketUserTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tableName1}
+        TableName: ${self:custom.usersTableName}
         AttributeDefinitions:
           - AttributeName: ID
             AttributeType: S
@@ -53,11 +53,10 @@ resources:
           - AttributeName: ID
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
-    
     WebsocketEmojiTable:
         Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tableName2}
+        TableName: ${self:custom.emojiTableName}
         AttributeDefinitions:
           - AttributeName: ID
             AttributeType: S
