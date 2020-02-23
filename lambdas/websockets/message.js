@@ -45,20 +45,17 @@ exports.handler = async event => {
     await Dynamo.writeEmoji(emojiData[0], emojiTableName);
 
     // send updated emoji data to all connections
-    let responseArray = connectionIDs
-      .map(record => {
-        const { domainName, stage, connectionID } = record;
-        await WebSocket.send({
-            domainName,
-            stage,
-            connectionID,
-            data: emojiData
-          });
-
+    let responseArray = connectionIDs.map(async record => {
+      const { domainName, stage, connectionID } = record;
+      await WebSocket.send({
+        domainName,
+        stage,
+        connectionID,
+        data: emojiData
       });
+    });
 
-      await Promise.all(responseArray);
-
+    await Promise.all(responseArray);
 
     return Responses._200({ message: "got a message" });
   } catch (err) {

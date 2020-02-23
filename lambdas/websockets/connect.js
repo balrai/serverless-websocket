@@ -25,6 +25,7 @@ exports.handler = async event => {
 
   // get emoji data for sending to newly connected users
   const emojiData = await Dynamo.getEmojiData(emojiTableName);
+  console.log("emoji data: ", emojiData);
 
   return Responses._200({ message: "connected", data: emojiData });
 };
