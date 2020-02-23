@@ -28,7 +28,7 @@ exports.handler = async event => {
     const userInput = body.message;
 
     if (emojiData.length < 1) {
-      emojiData.push({ like: 0, dislike: 0, love: 0 });
+      emojiData.push({ ID: 1, like: 0, dislike: 0, love: 0 });
     }
 
     switch (userInput) {
