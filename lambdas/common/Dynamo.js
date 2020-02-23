@@ -43,7 +43,7 @@ const Dynamo = {
 
     return data;
   },
-  async delete(ID, tableName) {
+  async delete(ID, TableName) {
     const params = {
       TableName,
       Key: {
