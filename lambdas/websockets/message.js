@@ -21,7 +21,7 @@ exports.handler = async event => {
     console.log("emojiData: ", emojiData);
 
     // get all connectionID
-    const connectionIDs = (await Dynamo.getAllID(usersTableName)).Items;
+    const connectionIDs = await Dynamo.getAllID(usersTableName);
     console.log("connectionIDs: ", connectionIDs);
 
     // update emoji data and write back
