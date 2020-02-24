@@ -31,7 +31,12 @@ exports.handler = async event => {
 
     await WebSocket.send(domainName, stage, connectionID, emojiData[0]);
 
-    return Responses._200({ message: "conn", data: emojiData[0] });
+    // return Responses._200({ message: "conn", data: emojiData[0] });
+
+    return {
+      statusCode: 200,
+      body: "Hello from Connect Lambda"
+    };
   } catch (err) {
     console.log("Error in connect.js: ", err);
     return Responses._400({ message: "Error connecting. ", err });
