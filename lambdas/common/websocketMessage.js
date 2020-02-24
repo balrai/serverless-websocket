@@ -11,7 +11,7 @@ const create = (domainName, stage) => {
 const send = (domainName, stage, connectionID, message) => {
   const ws = create(domainName, stage);
   const postParams = {
-    Data: message,
+    Data: JSON.stringify(message),
     ConnectionId: connectionID
   };
 
