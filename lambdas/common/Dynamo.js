@@ -26,7 +26,7 @@ const Dynamo = {
     try {
       await documentClient.put(params).promise();
     } catch (err) {
-      console.log("Error updating emoji count");
+      console.log("Error updating emoji count: ", err);
     }
     return;
   },
