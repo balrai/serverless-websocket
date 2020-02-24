@@ -11,7 +11,8 @@ const create = (domainName, stage) => {
 const send = (domainName, stage, connectionID, message) => {
   const ws = create(domainName, stage);
   const postParams = {
-    Data: JSON.stringify(message),
+    // Data: JSON.stringify(message),
+    Data: "response from server",
     ConnectionId: connectionID
   };
   console.log("from send(): ", postParams);
