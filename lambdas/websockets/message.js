@@ -28,7 +28,7 @@ exports.handler = async event => {
     const userInput = body.message;
 
     if (emojiData.length < 1) {
-      emojiData.push({ ID: 1, like: 0, dislike: 0, love: 0 });
+      emojiData.push({ ID: 1, like: 0, decent: 0, love: 0 });
     }
 
     switch (userInput) {
@@ -36,8 +36,8 @@ exports.handler = async event => {
         emojiData[0].like += 1;
         break;
 
-      case "dislike":
-        emojiData[0].dislike += 1;
+      case "decent":
+        emojiData[0].decent += 1;
         break;
 
       case "love":
@@ -46,7 +46,7 @@ exports.handler = async event => {
       default:
         break;
     }
-
+    console.log("emojidata on message.js: ", emojiData[0]);
     await Dynamo.writeEmojiData(emojiData[0], emojiTableName);
 
     // send updated emoji data to all connections

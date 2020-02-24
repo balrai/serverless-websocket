@@ -18,11 +18,16 @@ const Dynamo = {
     return data.Items;
   },
   async writeEmojiData(data, TableName) {
+    console.log("data inside Dynamo.js: ", data, TableName);
     const params = {
       TableName,
       Item: data
     };
-    await documentClient.put(params).promise();
+    try {
+      await documentClient.put(params).promise();
+    } catch (err) {
+      console.log("Error updating emoji count");
+    }
     return;
   },
   async get(ID, TableName) {
