@@ -1,5 +1,6 @@
 const Responses = require("../common/API_Responses");
 const Dynamo = require("../common/Dynamo");
+const WebSocket = require("../common/websocketMessage");
 
 const usersTableName = process.env.tableName1;
 const emojiTableName = process.env.tableName2;
@@ -26,6 +27,8 @@ exports.handler = async event => {
   // get emoji data for sending to newly connected users
   const emojiData = await Dynamo.getEmojiData(emojiTableName);
   console.log("emoji data: ", emojiData);
+
+  await WebSocket.send(domainName, stage, ID, emojiData[0]);
 
   return Responses._200({ message: "connected", data: emojiData });
 };

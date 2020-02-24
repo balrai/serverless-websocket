@@ -53,12 +53,7 @@ exports.handler = async event => {
     let responseArray = connectionIDs.map(async record => {
       console.log("record: ", record);
       const { domainName, stage, ID } = record;
-      await WebSocket.send({
-        domainName,
-        stage,
-        ID,
-        data: emojiData[0]
-      });
+      await WebSocket.send(domainName, stage, ID, emojiData[0]);
     });
 
     await Promise.all(responseArray);
