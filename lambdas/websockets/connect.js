@@ -29,9 +29,9 @@ exports.handler = async event => {
     const emojiData = await Dynamo.getEmojiData(emojiTableName);
     console.log("emoji data: ", emojiData);
 
-    // await WebSocket.send(domainName, stage, connectionID, emojiData[0]);
+    await WebSocket.send(domainName, stage, connectionID, emojiData[0]);
 
-    return Responses._200({ message: "connected", data: emojiData[0] });
+    return Responses._200({ message: "conn", data: emojiData[0] });
   } catch (err) {
     console.log("Error in connect.js: ", err);
     return Responses._400({ message: "Error connecting. ", err });
