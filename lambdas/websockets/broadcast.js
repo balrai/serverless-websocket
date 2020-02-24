@@ -14,15 +14,15 @@ exports.handler = async event => {
     stage
   } = event.requestContext;
 
-  const data = {
-    ID: connectionID,
-    date: Date.now(),
-    domainName,
-    stage
-  };
-
   try {
-    await Dynamo.write(data, usersTableName);
+    // TODO:  for live viewers, get all the connection ID and send data
+
+    // get emoji data for sending to newly connected users
+    const emojiData = await Dynamo.getEmojiData(emojiTableName);
+    console.log("emoji data: ", emojiData);
+
+    await WebSocket.send(domainName, stage, connectionID, emojiData[0]);
+
     return Responses._200({ message: "conn", data: emojiData[0] });
   } catch (err) {
     console.log("Error in connect.js: ", err);

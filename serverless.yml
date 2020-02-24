@@ -29,7 +29,12 @@ functions:
     events:
       - websocket:
           route: $disconnect
-  websocket-defult:
+  websocket-broadcast:
+    handler: lambdas/websockets/broadcast.handler
+    events:
+      - websocket:
+          route: broadcast
+  websocket-default:
     handler: lambdas/websockets/default.handler
     events:
       - websocket:
