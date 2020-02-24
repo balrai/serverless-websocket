@@ -29,7 +29,7 @@ exports.handler = async event => {
     const emojiData = await Dynamo.getEmojiData(emojiTableName);
     console.log("emoji data: ", emojiData);
 
-    await WebSocket.send(domainName, stage, connectionID, emojiData[0]);
+    // await WebSocket.send(domainName, stage, connectionID, emojiData[0]);
 
     // return Responses._200({ message: "conn", data: emojiData[0] });
 
