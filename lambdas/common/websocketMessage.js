@@ -14,6 +14,7 @@ const send = (domainName, stage, connectionID, message) => {
     Data: JSON.stringify(message),
     ConnectionId: connectionID
   };
+  console.log("from send(): ", postParams);
 
   return ws.postToConnection(postParams).promise();
 };
